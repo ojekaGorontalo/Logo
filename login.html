@@ -46,7 +46,7 @@
   <button onclick="signInWithGoogle()">Masuk dengan Google</button>
 
   <script>
-    // Fungsi ambil query string dari URL
+    // Ambil firebaseConfig dari parameter URL
     function getFirebaseConfigFromURL() {
       const params = new URLSearchParams(window.location.search);
       const rawConfig = params.get("firebaseConfig");
@@ -62,13 +62,11 @@
       }
     }
 
-    // Mulai Firebase
     const config = getFirebaseConfigFromURL();
     if (config) {
       firebase.initializeApp(config);
     }
 
-    // Proses login dengan Gmail
     function signInWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
       firebase.auth().signInWithPopup(provider)
@@ -83,7 +81,7 @@
             photoUrl: user.photoURL
           });
 
-          // Redirect (opsional)
+          // Redirect ke halaman lain (jika perlu)
           // window.location.href = "beranda.html";
         })
         .catch((error) => {
