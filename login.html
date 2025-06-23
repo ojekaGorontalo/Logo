@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Go-Cycle</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #007BFF, white, red);
+    }
+    .logo {
+      width: 100px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      color: white;
+      text-shadow: 1px 1px 2px black;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      background-color: white;
+      color: #007BFF;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <img class="logo" src="https://raw.githubusercontent.com/ojekaGorontalo/Logo/main/pedicab.png" alt="Go-Cycle Logo">
+  <h2>Login dengan Gmail</h2>
+  <button onclick="signInWithGoogle()">Masuk dengan Google</button>
+
+  <script>
+    // Fungsi ambil query string dari URL
+    function getFirebaseConfigFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      const rawConfig = params.get("firebaseConfig");
+      if (!rawConfig) {
+        alert("firebaseConfig tidak ditemukan di URL!");
+        return null;
+      }
+      try {
+        return JSON.parse(decodeURIComponent(rawConfig));
+      } catch (e) {
+        alert("firebaseConfig tidak valid!");
+        return null;
+      }
+    }
+
+    // Mulai Firebase
+    const config = getFirebaseConfigFromURL();
+    if (config) {
+      firebase.initializeApp(config);
+    }
+
+    // Proses login dengan Gmail
+    function signInWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+          const user = result.user;
+          alert("Selamat datang, " + user.displayName);
+
+          // Simpan ke Realtime Database
+          firebase.database().ref("Users/" + user.uid).set({
+            userName: user.displayName,
+            email: user.email,
+            photoUrl: user.photoURL
+          });
+
+          // Redirect (opsional)
+          // window.location.href = "beranda.html";
+        })
+        .catch((error) => {
+          console.error("Login gagal:", error.message);
+          alert("Gagal login: " + error.message);
+        });
+    }
+  </script>
+</body>
+</html>
