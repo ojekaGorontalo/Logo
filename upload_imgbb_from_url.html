@@ -2,28 +2,44 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Upload ke imgbb dari URL</title>
+  <title>Upload ke imgbb</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; text-align: center; }
-    input { margin-top: 20px; }
-    img { max-width: 100%; margin-top: 20px; }
-    #status { margin-top: 10px; font-size: 14px; color: green; }
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 50px;
+      margin-bottom: 20px;
+    }
+
+    input[type="file"] {
+      font-size: 40px;
+    }
+
+    img {
+      max-width: 100%;
+      margin-top: 20px;
+    }
+
+    #status {
+      margin-top: 10px;
+      font-size: 14px;
+      color: green;
+    }
   </style>
 </head>
 <body>
-  <h3>Upload Gambar ke imgbb</h3>
+  <h1>Upload Gambar</h1>
   <input type="file" accept="image/*" onchange="uploadImage(this)" />
   <img id="preview" />
   <p id="status"></p>
 
   <script>
-    // Ambil apiKey dari parameter URL
     const params = new URLSearchParams(window.location.search);
     const imgbbAPI = params.get("apiKey");
-
-    if (!imgbbAPI) {
-      document.getElementById("status").innerText = "API Key tidak ditemukan di URL!";
-    }
 
     function uploadImage(input) {
       const file = input.files[0];
