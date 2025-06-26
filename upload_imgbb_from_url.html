@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Upload ke imgbb dari URL</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; text-align: center; }
+    input { margin-top: 20px; }
+    img { max-width: 100%; margin-top: 20px; }
+    #status { margin-top: 10px; font-size: 14px; color: green; }
+  </style>
+</head>
+<body>
+  <h3>Upload Gambar ke imgbb</h3>
+  <input type="file" accept="image/*" onchange="uploadImage(this)" />
+  <img id="preview" />
+  <p id="status"></p>
+
+  <script>
+    // Ambil apiKey dari parameter URL
+    const params = new URLSearchParams(window.location.search);
+    const imgbbAPI = params.get("apiKey");
+
+    if (!imgbbAPI) {
+      document.getElementById("status").innerText = "API Key tidak ditemukan di URL!";
+    }
+
+    function uploadImage(input) {
+      const file = input.files[0];
+      if (!file || !imgbbAPI) return;
+
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        const base64 = reader.result.replace(/^data:image\/(png|jpeg|jpg);base64,/, "");
+        document.getElementById("status").innerText = "Mengupload...";
+
+        fetch("https://api.imgbb.com/1/upload?key=" + imgbbAPI, {
+          method: "POST",
+          body: new URLSearchParams({ image: base64 })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            const url = data.data.url;
+            document.getElementById("preview").src = url;
+            document.getElementById("status").innerText = "✅ Berhasil upload";
+
+            if (window.AppInventor) {
+              window.AppInventor.setWebViewString(url);
+            }
+          } else {
+            document.getElementById("status").innerText = "❌ Gagal upload!";
+          }
+        })
+        .catch(err => {
+          document.getElementById("status").innerText = "Error: " + err;
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  </script>
+</body>
+</html>
