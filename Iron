@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nasehat Bijak</title>
+    <style>
+        body {
+            background-color: #ffeb3b;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+        .message {
+            background-color: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            max-width: 80%;
+            animation: bounce 2s infinite;
+        }
+        h1 {
+            color: #e91e63;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .emoji {
+            font-size: 3em;
+            animation: spin 3s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="message">
+        <div class="emoji">🤪</div>
+        <h1>Ian, kalo ngana pe otak error, pi bli obat dulu!</h1>
+        <p>~ Nasehat bijak untuk hari ini ~</p>
+    </div>
+
+    <audio autoplay>
+        <source src="https://www.myinstants.com/media/sounds/vine-boom.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung elemen audio.
+    </audio>
+
+    <script>
+        // Fallback jika autoplay tidak bekerja
+        document.addEventListener('click', function() {
+            document.querySelector('audio').play();
+        });
+    </script>
+</body>
+</html>
